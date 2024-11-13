@@ -14,6 +14,14 @@ Create jenkins
 gowsika
 gowsika1234
 
+jenkins-
+tejaswini2310
+teja@1234
+
+github - TEJASWINIRAMESH , pass- Tedmosby@23
+
+Docker - tejaswiniramesh, pass- teja@1234
+
 github-gPUPK126
 
 create new repo
