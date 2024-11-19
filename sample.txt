@@ -193,3 +193,65 @@ Save
 
 Build now
 Console output
+
+
+
+
+                                                                               Load Balancing
+
+docker build -t new_flask
+docker run -d --name app1 -p 5001:5000 new_flask
+docker run -d --name app2 -p 5002:5000 new_flask
+docker run -d --name app3 -p 5003:5000 new_flask
+
+if error for port not found:
+docker ps -a
+docker stop container_id
+docker rm container_id
+
+sudo apt update
+sudo apt install -y nginx
+cd /etc/nginx/sites-available
+
+sudo nano new_flask
+
+upstream flask_app {
+    server 127.0.0.1:6001;
+    server 127.0.0.1:6002;
+    server 127.0.0.1:6003;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://flask_app;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+ctrl+x,Y,enter
+
+
+
+sudo ln -s /etc/nginx/sites-available/new_flask/etc/nginx/sites-enabled/
+sudo nginx -t
+
+.
+.
+.      test is successful
+
+sudo systemctl restart nginx
+sudo systemctl status nginx
+
+Sometimes close aagadhu go to new terminal and do below
+
+hostname -I
+smtg 10.0.2.15
+
+http://10.0.2.15/   -----> nginx page
+http://10.0.2.15:5001
+
+
