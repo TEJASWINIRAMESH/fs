@@ -308,12 +308,64 @@ http://ipaddress:5000/
 
 
 
+				TESTING IN JENKINS
+
+have two file in a folder 
+hello.py
+
+# hello.py
+def say_hello():
+    return "Hello, World!"
+
+if __name__ == "__main__":
+    print(say_hello())
+
+
+
+test_hello.py
+
+# test_hello.py
+import unittest
+from hello import say_hello
+
+class TestHelloWorld(unittest.TestCase):
+    def test_say_hello(self):
+        self.assertEqual(say_hello(), "Hello, World!")
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+add these to a git repo 
+
+now create a jenkins freestyle prooject 
+git le add git repo 
+add build step "execute over window batch"
+now add the command 
+"   python -m unittest discover -s . -p "test_*.py"   "
+svae and buold now 
+
+
+o/p ----? OK
+
 
 
 				ERAI FILE TRANSFER IN JENKINS
 
 
 step 1 : ssh establishment 
+
+till ssh copyid 
+for jenkins 
+in  a terminal give   java -jar jenkins.war --logfile=/home/USER/jenkins.log
+
+now create a freestyle project in jenkins 
+add build step le " execute shell "
+the give scp command in the cmd box 
+
+scp hello.sh remoteusername@remoteipaddress:/home/codebind (Where to save in the remote system)
+
+
 
 
 
