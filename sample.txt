@@ -285,3 +285,38 @@ FETCHING FILE FROM REMOTE
 scp remoteusername@remoteipaddress:/home/codebind/file.txt /home/test/Desktop/
 remote system password:
 
+
+
+
+						DOCKER JENKINS
+
+build normal docker image and build that in the terminal 
+
+docker build -t new_flask .
+
+now in another terminal run the jenkin command for the ubuntu (take from above)
+
+now in jenkin http://localhost:8080/
+login ---> new item -----> freestyle project ------> add build step -----> execute shell ----> in the cmd prompt  give cmd :
+
+docker run -d --name app1 -p 5000:5000 new_flask
+save 
+build now 
+
+http://ipaddress:5000/
+
+
+
+
+
+
+				ERAI FILE TRANSFER IN JENKINS
+
+
+step 1 : ssh establishment 
+
+
+
+
+
+
