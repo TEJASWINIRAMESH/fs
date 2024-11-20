@@ -255,3 +255,33 @@ http://10.0.2.15/   -----> nginx page
 http://10.0.2.15:5001
 
 
+
+
+								JENKINS DOWNLOAD IN UBUNTU
+sudo apt-get update
+sudo apt-get install jenkins
+sudo apt install fontconfig openjdk-17-jre
+java --version
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword   -------->      Gives the password
+
+
+
+							SSH FILE TRANSFER IN UBUNTU
+LOCAL SYSTEM la
+SENDING FILE TO REMOTE SYSTEM:
+If file in Desktop(hello.sh):
+scp
+cd Desktop/
+scp hello.sh remoteusername@remoteipaddress:/home/codebind (Where to save in the remote system)
+yes
+Remote password
+
+FETCHING FILE FROM REMOTE
+scp remoteusername@remoteipaddress:/home/codebind/file.txt /home/test/Desktop/
+remote system password:
+
