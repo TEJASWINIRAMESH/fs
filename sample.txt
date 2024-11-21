@@ -368,7 +368,15 @@ scp hello.sh remoteusername@remoteipaddress:/home/codebind (Where to save in the
 
 
 
+			ANNU QUESTION
 
+
+nano script.sh
+in script.sh add the command
+
+scp annu.txt  pakathuveetuusername@pakathuvetuipaddress: nandhana.txt  ---- annu sending to nandhana
+
+bash script.sh
 
 
 
