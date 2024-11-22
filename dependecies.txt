@@ -1,3 +1,5 @@
+build status notify users--- https://stackoverflow.com/questions/14274293/show-current-state-of-jenkins-build-on-github-repo
+
 #Q1 FILE MANIPULATION
 
 chmod +x script.sh
