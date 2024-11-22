@@ -535,36 +535,156 @@ git log --oneline  # To view the commit history
 
 testing with dockerized container
 
-after Jenkins installation and docker installation and type this in docker terminal
+Step 1: Create a Dockerized Testing Environment
+
+dockerfile
+# Use Python as the base image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the application and test files to the container
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Default command to run the tests
+CMD ["python", "-m", "unittest", "discover"]
+
+project/
+│
+├── Dockerfile
+├── requirements.txt  pytest
+├── string_manipulator.py  # Your main code
+└── test_string_manipulator.py  # Unit tests
+
+
+docker build -t string-manipulator-tests .
+docker run string-manipulator-tests
+
+You should see output from unittest.
+
+Step 2: Install and Configure Jenkins
+2.1 Install Jenkins
+If not already installed, use Docker to set up Jenkins:
+
+docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+Visit http://localhost:8080 and follow the setup instructions.
+------------------------------------------------------------------------------------
+Step 3: Configure Jenkins for Testing
+3.1 Install Docker in the Jenkins Container
+Access the Jenkins container shell:
+bash
+Copy code
+docker exec -it <jenkins_container_id> bash
+Install Docker in the Jenkins container:
+bash
+Copy code
+apt-get update
+apt-get install -y docker.io
+Exit the container.
+3.2 Add Jenkins User to Docker Group
+To allow Jenkins to execute Docker commands:
+
+bash
+Copy code
+docker exec -it <jenkins_container_id> bash
+usermod -aG docker jenkins
+3.3 Create a Jenkins Pipeline Job
+Go to Jenkins Dashboard and create a Pipeline Job.
+In the Pipeline section, choose Pipeline script and enter the following:
+groovy
+Copy code
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clone the repository containing the code and tests
+                git 'https://github.com/your-repo/string-manipulator.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+                sh 'docker build -t string-manipulator-tests .'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                // Run the tests inside the container
+                sh 'docker run string-manipulator-tests'
+            }
+        }
+    }
+    post {
+        always {
+            // Cleanup: Remove the container after the test
+            sh 'docker rmi string-manipulator-tests'
+        }
+    }
+}
+3.4 Save and Run the Job
+-----------------------------------------------------------------------------or this
+Step 3: Configure Jenkins for Testing after jenkins installation
+3.1 Install Plugins
+Install the Pipeline, Git, and Docker Pipeline plugins from the Jenkins Plugin Manager (Manage Jenkins > Manage Plugins).
+
+3.2 Add Docker to Jenkins
+To execute Docker commands from Jenkins, ensure Docker is installed on the same machine and accessible by Jenkins.
+
+Install Docker:
+sudo apt-get install docker.io
+Add Jenkins User to Docker Group: Add the Jenkins user to the docker group to allow Jenkins to execute Docker commands:
 
 sudo usermod -aG docker jenkins
+Restart Jenkins:
 sudo systemctl restart jenkins
 
+Verify Docker Access: Switch to the Jenkins user and verify Docker commands work:
+sudo su - jenkins
+docker --version
 
-normal docker but add an0ther test_app.py
+Step 4: Create a Pipeline Job
+Go to Jenkins Dashboard.
+Click New Item, select Pipeline, and give your job a name.
+In the Pipeline section, select Pipeline Script and enter the following:
+groovy
+Copy code
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clone the repository containing the code and tests
+                git 'https://github.com/your-repo/string-manipulator.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                // Build the Docker image
+                sh 'docker build -t string-manipulator-tests .'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                // Run the tests inside the container
+                sh 'docker run string-manipulator-tests'
+            }
+        }
+    }
+    post {
+        always {
+            // Cleanup: Remove the container after the test
+            sh 'docker rmi string-manipulator-tests'
+        }
+    }
+}
+Save the job.
+--------------------------------------------------------------------------------------
 
-test_app.py
-
-# test_app.py
-import requests
-
-def test_homepage():
-    response = requests.get("http://localhost:5000")
-    assert response.status_code == 200
-    assert response.text == "Hello, Docker!"
-
-if _name_ == "_main_":
-    test_homepage()
-    print("Tests passed!")
------------------------------------------------------------
-requirements.txt
-
-Flask==2.3.3
-requests
-------------------------------------------------------------
-== create a new git repo and add -app.py,test_app.py,reqirements.txt,Dockerfile in a folder named flaskapp
-
-go to Jenkins and create a freestyle projet
 
 
 
