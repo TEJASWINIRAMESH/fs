@@ -150,6 +150,87 @@ class TestCalculator(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 ########################################################
+class StringManipulator:
+    def __init__(self, text):
+        self.text = text
+
+    def reverse_string(self):
+        return self.text[::-1]
+
+    def to_uppercase(self):
+        return self.text.upper()
+
+    def count_words(self):
+        return len(self.text.split())
+
+    def is_palindrome(self):
+        cleaned_text = ''.join(char.lower() for char in self.text if char.isalnum())
+        return cleaned_text == cleaned_text[::-1]
+
+    def replace_word(self, old_word, new_word):
+        return self.text.replace(old_word, new_word)
+
+    def count_character(self, char):
+        return self.text.count(char)
+##############################################################
+import unittest
+
+class TestStringManipulator(unittest.TestCase):
+    def setUp(self):
+        # Initialize StringManipulator with a sample string
+        self.sample_text = "Hello world"
+        self.manipulator = StringManipulator(self.sample_text)
+
+    # Original Tests
+    def test_reverse_string(self):
+        self.assertEqual(self.manipulator.reverse_string(), "dlrow olleH")
+
+    def test_to_uppercase(self):
+        self.assertEqual(self.manipulator.to_uppercase(), "HELLO WORLD")
+
+    def test_count_words(self):
+        self.assertEqual(self.manipulator.count_words(), 2)
+
+    def test_empty_string(self):
+        empty_manipulator = StringManipulator("")
+        self.assertEqual(empty_manipulator.reverse_string(), "")
+        self.assertEqual(empty_manipulator.to_uppercase(), "")
+        self.assertEqual(empty_manipulator.count_words(), 0)
+
+    # New Tests
+    def test_is_palindrome(self):
+        # Positive case
+        palindrome_manipulator = StringManipulator("Madam")
+        self.assertTrue(palindrome_manipulator.is_palindrome())
+        
+        # Negative case
+        self.assertFalse(self.manipulator.is_palindrome())
+
+    def test_replace_word(self):
+        result = self.manipulator.replace_word("world", "Python")
+        self.assertEqual(result, "Hello Python")
+        
+        # Case where word is not in the text
+        result = self.manipulator.replace_word("Java", "Python")
+        self.assertEqual(result, "Hello world")
+
+    def test_count_character(self):
+        self.assertEqual(self.manipulator.count_character("o"), 2)
+        self.assertEqual(self.manipulator.count_character("l"), 3)
+        self.assertEqual(self.manipulator.count_character("z"), 0)
+
+    def test_edge_cases(self):
+        # Test single-character string
+        single_char_manipulator = StringManipulator("a")
+        self.assertTrue(single_char_manipulator.is_palindrome())
+        self.assertEqual(single_char_manipulator.count_character("a"), 1)
+        
+        # Test a string with special characters
+        special_char_manipulator = StringManipulator("A man, a plan, a canal, Panama!")
+        self.assertTrue(special_char_manipulator.is_palindrome())
+
+if __name__ == "__main__":
+    unittest.main()
 
 == go to Jenkins and click new item
 ==click frestyle and ok
