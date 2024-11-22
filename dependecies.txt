@@ -99,6 +99,124 @@ class Test
 hostname -I --> ip address
 whoami ---> username
 
+=================================
+Step 1: Install Prerequisites
+Update System Packages:
+
+bash
+Copy code
+sudo apt update
+Install Java:
+
+bash
+Copy code
+sudo apt install openjdk-17-jre-headless
+Verify the installation:
+
+bash
+Copy code
+java --version
+Install Git:
+
+bash
+Copy code
+sudo apt install git
+Step 2: Install Jenkins
+Download the Jenkins WAR File:
+
+Visit the official Jenkins website and download the jenkins.war file.
+Place the file in your home directory (e.g., /home/USER/jenkins.war).
+Run Jenkins:
+
+bash
+Copy code
+java -jar jenkins.war
+Access Jenkins:
+
+Open a browser and go to http://localhost:8080.
+Jenkins will prompt for an administrator password. Retrieve it using:
+bash
+Copy code
+cat ~/.jenkins/secrets/initialAdminPassword
+Setup Jenkins:
+
+Paste the password into the browser.
+Install the suggested plugins.
+Create an admin account when prompted.
+Run Jenkins with Log Tracking: Stop Jenkins temporarily:
+
+bash
+Copy code
+Ctrl + Z
+Restart Jenkins with logging enabled:
+
+bash
+Copy code
+java -jar jenkins.war --logfile=/home/USER/jenkins.log
+Replace USER with your username.
+
+Step 3: Transfer Logs to Remote Machine (Optional)
+Transfer the Log File:
+bash
+Copy code
+scp /home/USER/jenkins.log user@ipaddress:remotelog.txt
+Replace:
+USER with your username.
+user@ipaddress with the remote machine's username and IP address.
+remotelog.txt with the desired name for the log file on the remote machine.
+Step 4: Create the Java Program
+Create Test.java:
+bash
+Copy code
+nano Test.java
+Add the following code:
+java
+Copy code
+class Test {
+    public static void main(String[] args) {
+        System.out.println("Hello World!!");
+    }
+}
+Save and exit:
+Press Ctrl+X, then Y, and Enter.
+Step 5: Create the Jenkins Pipeline
+Go to Jenkins Dashboard:
+
+Open your browser and go to http://localhost:8080.
+Create a New Pipeline:
+
+Click New Item.
+Enter a name (e.g., JavaTestPipeline).
+Select Pipeline and click OK.
+Define the Pipeline Script:
+
+Scroll down to the Pipeline section.
+Select Pipeline Script.
+Enter the following script:
+groovy
+Copy code
+pipeline {
+    agent any
+    stages {
+        stage('version') {
+            steps {
+                echo 'Stage Version'
+            }
+        }
+        stage('hello') {
+            steps {
+                echo 'Stage Hello'
+                sh 'javac Test.java' // Compile the Java program
+                sh 'java Test'       // Run the Java program
+            }
+        }
+    }
+}
+Save the Pipeline.
+
+Step 6: Run the Pipeline
+Click Build Now on the Jenkins Dashboard.
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #Q3 SSH REMOTE-LOCAL CONNECTION
